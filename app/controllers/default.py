@@ -1,5 +1,6 @@
 from app import app
 from bottle import request, template, static_file
+from app.models.default import insert_user
 
 
 # static routes
