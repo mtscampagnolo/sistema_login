@@ -1,6 +1,9 @@
 % rebase('base.html', title='Fazer login')
 
 <div class="container">
+	% if sucesso == False:
+	<div class="alert alert-danger">Usuário ou senha invalidos</div>
+	% end
     <div class="row vertical-offset-100">
     	<div class="col-md-4 col-md-offset-4">
     		<div class="panel panel-default">

@@ -1,6 +1,6 @@
 from app import app
 from app.models.default import User
-from bottle import request, template, static_file
+from bottle import request, template, static_file, redirect
 from app.models.default import insert_user
 
 
@@ -24,19 +24,17 @@ def fonts(filename):
 
 @app.route('/') # @get('/')
 def login():
-	return template('login')
-
-def check_login(username, password):
-	d = {'marcos':'python', 'joao':'java', 'pedro':'go'}
-	if username in d.keys() and d[username] == password:
-		return True
-	return False
+	return template('login', sucesso=True)
 
 @app.route('/', method='POST') # @post('/')
-def acao_login():
+def acao_login(db):
 	username = request.forms.get('username')
 	password = request.forms.get('password')
-	return template('verificacao_login', sucesso=True)
+	result = db.query(User).filter((User.username == username) & (User.password == password)).all()
+	if result:
+		return redirect('/usuarios')
+	else:
+		return template('login', sucesso=False)
 
 @app.route('/cadastro')
 def cadastro():
@@ -47,7 +45,12 @@ def acao_cadastro(db):
 	password = request.forms.get('password')
 	new_user = User(username, password)
 	db.add(new_user)
-	return template('verificacao_cadastro', nome=username)
+	return redirect('/usuarios')
+
+@app.route('/usuarios')
+def usuarios(db):
+	usuarios = db.query(User).all()
+	return template('lista_usuarios', usuarios=usuarios)
 
 @app.error(404)
 def error404(error):
