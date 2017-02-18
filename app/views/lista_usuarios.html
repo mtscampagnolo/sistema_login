@@ -5,7 +5,11 @@
 </div>
 
 <ul class="list-group">
-	% for usuario in usuarios:
-	<li class="list-group-item">{{ usuario.username }}</li>
-	% end
+	% if acesso:
+		% for usuario in usuarios:
+		<li class="list-group-item">{{ usuario.username }}</li>
+		% end
+	% else:
+	<center><p style="color:red"><strong>Acesso Negado</strong></p></center>
+	%end
 </ul>
